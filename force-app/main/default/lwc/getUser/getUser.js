@@ -1,9 +1,5 @@
 import { LightningElement,wire } from 'lwc';
 import getUserData from '@salesforce/apex/UsersCallout.getUserData'
-            
-
-
-
 export default class GetUser extends LightningElement {
 
     userData = [];
@@ -14,83 +10,42 @@ export default class GetUser extends LightningElement {
     showButtons = false;
     disablePrevious = true;
 
-       f= function getData(page, per_page){
-        console.log('inside function');
-        getUserData({one:this.page,two:this.per_page})   
-        .then(result =>{
-            let response = JSON.parse(result);
-            this.userData = response.data;
-            this.loadTable = true;
-            
-        }).catch(error =>{
-            console.log('error',error);
-        })
-        
-            
+        getData(page, per_page){
+            console.log('page-- '+page,'per page '+per_page);
+            getUserData({one: page,two: per_page})   
+            .then(result =>{
+                let response = JSON.parse(result);
+                this.userData = response.data;
+                this.loadTable = true;            
+            }).catch(error =>{
+                console.log('error',error);
+            })
         }
-
     
-    handleClick(){     
-        
-        getUserData({one:this.page, two:this.per_page})   
-        .then(result =>{
-            let response = JSON.parse(result);
-            this.userData = response.data;
-            this.loadTable = true;
-            this.showButtons = true;
-                      
-        }).catch(error =>{
-            console.log('error',error);
-        })
-        
-            
+    handleClick(){  
+        console.log('inside user info');     
+        this.showButtons = true; 
+        this.getData(this.page, this.per_page);        
     }
 
     hanldeNext(){
         this.page++;
         this.disablePrevious = false;
-
         this.getData(this.page,this.per_page);
-
         if(this.page==3){
-            
             this.disableNext = true;
 
         }
-        
-       getUserData({one:this.page,two:this.per_page})   
-        .then(result =>{
-            let response = JSON.parse(result);
-            this.userData = response.data;
-            this.loadTable = true;
-            
-        }).catch(error =>{
-            console.log('error',error);
-        })
-        
     }
 
-    hanldePrevious(){
-        
+    hanldePrevious(){        
         this.page--;
         if(this.page==1){
             this.disablePrevious = true;
             this.disableNext = false;
-            
         }
-        
-        getUserData({one:this.page,two:this.per_page})   
-        .then(result =>{
-            let response = JSON.parse(result);
-            this.userData = response.data;
-            this.loadTable = true;
-           
-        }).catch(error =>{
-            console.log('error',error);
-        })
+        this.getData(this.page,this.per_page);
 
     }
-    
-
 
 }

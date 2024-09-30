@@ -1,0 +1,110 @@
+<template>
+    <lightning-card>
+        <lightning-input label="Enter Object Name" type="search" onfocus={handleFocus} style="width: 250px;"
+            onchange={handleChange}></lightning-input>
+        <div class="slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open dropdown">
+            <div style="margin-top:-15px"
+                class="slds-dropdown slds-dropdown_left slds-dropdown_small slds-dropdown_length-with-icon-5">
+                <ul class="slds-dropdown__list" role="menu">
+                    <template for:each={dropdownList} for:item="item">
+                        <li key={item} data-label={item.label} onclick={handleMouseClick}
+                            class="slds-is-selected slds-dropdown__item" role="presentation">
+                            <a role="menuitem" tabindex="-1">
+                                <span class="slds-truncate" title={item.label}>
+                                    <lightning-icon size="x-small" icon-name="utility:standard_objects">
+                                    </lightning-icon>
+                                    <span class="slds-truncate">{item.label}</span><br>
+                                    <!-- <span class="slds-truncate">{item.ApiName}</span> -->
+                                </span>
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </div>
+        <template if:true={Modal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box LWC header here -->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" varian t="inverse"
+                                size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create/Add Records
+                        </h2>
+                    </header>
+                    <!-- Modal/Popup Box LWC body starts he re -->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning-tabset>
+                            <lightning-tab label="Create New Records">
+                                <template for:each={InputFields} for:item="input">
+                                    <lightning-input key={input} type={input.type}
+                                        label={input.Label}></lightning-input>
+                                </template>
+                            </lightning-tab>
+                            <lightning-tab onactive={onTabClick} label="Add Existing">
+                                <lightning-input type="search" label="Add Existing"
+                                    onchange={recordSearch}></lightning-input>
+                                    <h5 if:true={showNoRecords}><b>No Existing records to add</b></h5>
+                                <table if:true={showTable} class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-table_bordered slds-table_resizable-cols" role="grid">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <template for:each={tableHeader} for:item="item">
+                                                <th scope="col" class="slds-cell_action-mode slds-is-resizable slds-is-sortable" key={item}>
+                                                    <div title={item}>{item}</div>
+                                                </th>
+                                            </template>
+                                            <th scope="col" class="slds-cell_action-mode slds-is-resizable slds-is-sortable" key={item}>
+                                                <div>Add/Remove Records</div>
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={tableData} for:item="data">
+                                            <tr key={data.Id} class="slds-hint-parent">
+                                                <template for:each={data.values} for:item="value">
+                                                    <td class="slds-cell_action-mode slds-cell-wrap" key={value} data-id={data.Id}>{value}</td>
+                                                </template>
+                                                <td>
+                                                <lightning-button-stateful
+                                                class="slds-p-around_medium button"
+                                                key={data.Id}
+                                                label-when-off="Add"
+                                                label-when-on="Added"
+                                                label-when-hover="Remove"
+                                                icon-name-when-off="utility:new"
+                                                icon-name-when-on="utility:check"
+                                                icon-name-when-hover="utility:close"
+                                                data-id={data.Id}
+                                                selected={isSelected}
+                                                onclick={handleButton}>                                                
+                                            </lightning-button-stateful>
+                                                </td>
+                                                                                                
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                 </table>
+        </lightning-tab>
+        </lightning-tabset>
+
+        </div>
+
+        <!-- Modal/Popup     Box LWC footer starts here -->
+        <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+            <button class="slds-button slds-button_brand" onclick={submitDetails} title="OK">Save</button>
+        </footer>
+        </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+</lightning-card>
+
+
+</template>

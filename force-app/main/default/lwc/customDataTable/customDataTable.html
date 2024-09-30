@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title="Custom Table">
+        <table class="slds-table slds-table_fixed-layout slds-table_resizable-cols slds-table_bordered slds-table_cell-buffer " role="grid">
+            <thead>  
+                <tr class="slds-line-height_reset">             
+                    <template for:each={tableHeader} for:item="header">
+                        <th scope="col" key={header}>
+                            <div class="slds-truncate">{header.label}</div>
+                        </th>                
+                    </template>
+                </tr>                
+            </thead>                        
+                <tbody>
+                    <template for:each={tableData} for:item="data">
+                        <tr key={data}>
+                            <template for:each={data.arryOfData} for:item="value">
+                                <td data-id={value.Id} key={value}>{value}</td>
+                            </template>
+                        </tr>
+                    </template>
+                </tbody>                
+        </table>
+    </lightning-card>
+</template>

@@ -6,7 +6,6 @@ import dynamicFields from '@salesforce/apex/GetAccountRelatedContacts.dynamicFie
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation'
 
-
 export default class ContactDetails extends NavigationMixin(LightningElement) {
 
     @api recordId;
@@ -30,19 +29,21 @@ export default class ContactDetails extends NavigationMixin(LightningElement) {
     ShowTable = false;
     fieldNames = [];
 
-    async connectedCallback() {
+    async connectedCallback(){
         try {
             let dynamicCols = await this.fetchFields(this.Fields, this.objName);
             this.columns = dynamicCols;
+            console.log('dynamic cols--->',JSON.stringify(dynamicCols));
             let fieldApiNames = dynamicCols.map(c => c.fieldName);
             this.fieldNames  = fieldApiNames;
-            console.log('field', JSON.stringify(fieldApiNames));
+            //console.log('field', JSON.stringify(fieldApiNames));
             this.dynamicCols = [...dynamicCols, { label: 'Unassign Contact', fieldName: 'unassign', type: 'button-icon' }];
             this.conData = await this.getData(fieldApiNames, this.objName);
             let arry = this.conData
             this.TableData = await this.createDynamicData(arry, fieldApiNames)
+            console.log('Table Data---->',JSON.stringify(this.TableData));
         } catch (error) {
-            console.log('ERROR LOADING: ', error.message);
+            console.log('ERROR LOADING:', error.message);
         }
     }
      async createDynamicData(arry, fields) {
@@ -65,7 +66,6 @@ export default class ContactDetails extends NavigationMixin(LightningElement) {
                 newobj['values'] = Object.values(updatedObj);
                 return newobj;
             });
-            console.log('Dynamic Data---', JSON.stringify(DynamicData));
             return DynamicData;
     
         }
@@ -78,7 +78,7 @@ export default class ContactDetails extends NavigationMixin(LightningElement) {
     
     async fetchFields(fields, objectApiName) {
         let fieldsResult = [];
-        await dynamicFields({ fields: fields, objName: objectApiName })
+        await dynamicFields({fields: fields, objName: objectApiName})
             .then(result => {
                 for (let ele of result) {
                     let col = {};
@@ -128,7 +128,6 @@ export default class ContactDetails extends NavigationMixin(LightningElement) {
             let selectedRecords = this.template.querySelector("lightning-datatable").getSelectedRows();
             this.openModal = false;
             let cont = {};
-            console.log('selected rows',JSON.stringify(selectedRecords));
             handleUnassignAndCreate({ cont: cont, recordId: this.recordId, conList: selectedRecords})
                 .then(async result => {
                     let Data = [];
@@ -150,7 +149,6 @@ export default class ContactDetails extends NavigationMixin(LightningElement) {
         }
         else if (event.target.title === 'Create') {
             if (this.checkValidation()) {
-                console.log('inisde if ');
                 this.openModal = false;
                 let con = [];
                    handleUnassignAndCreate({ cont: this.newRecord, recordId: this.recordId, conList: con })
@@ -158,9 +156,9 @@ export default class ContactDetails extends NavigationMixin(LightningElement) {
                         let temparry = [];
                         this.newRecord.Id = result.Id;
                         temparry.push(this.newRecord)
-                        console.log('temparry',JSON.stringify(temparry));
+                        //console.log('temparry',JSON.stringify(temparry));
                         let data = await this.createDynamicData(temparry,this.fieldNames);
-                        console.log('data to table---',JSON.stringify(data));
+                        //console.log('data to table---',JSON.stringify(data));
                         this.TableData = [...this.TableData, ...data];
                         this.showToast('Added successfully!', 'Contact linked succesfully', 'success');
                         this.newRecord = {};
@@ -176,16 +174,14 @@ export default class ContactDetails extends NavigationMixin(LightningElement) {
     }
 
     handleUnassign(event) {
-        console.log('inside unassign');
+        
         let conId = event.currentTarget.dataset.id;
-        console.log('inside conId', conId);
         let contact = {
             'SObjectType': 'Contact',
             'Id': event.currentTarget.dataset.id,
             'AccountId': null
         }
         let con = [];
-        console.log('inside unassign');
         handleUnassignAndCreate({ cont: contact, recordId: null, conList: con })
             .then(result => {
                 let newArr = this.TableData.filter(c => (c.Id != conId));
@@ -226,15 +222,13 @@ export default class ContactDetails extends NavigationMixin(LightningElement) {
     newRecord = {};
     handleChange(event) {
         if(event.target.dataset.name=='IsCheck__c'){
-            console.log('insidee----chckbox',event.target.checked);
-
             this.newRecord[event.target.dataset.name] = event.target.checked ? event.target.checked : false;
 
         }else if(event.target.dataset.name!=='IsCheck__c'){
             this.newRecord[event.target.dataset.name] = event.target.value;
-            console.log('new reocrd', JSON.stringify(this.newRecord));
+            //console.log('new reocrd', JSON.stringify(this.newRecord));
         }
-        console.log('newrecord',JSON.stringify(this.newRecord));
+        //console.log('newrecord',JSON.stringify(this.newRecord));
     }
 
     checkValidation() {

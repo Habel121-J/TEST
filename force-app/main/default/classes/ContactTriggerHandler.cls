@@ -10,15 +10,44 @@ public class ContactTriggerHandler {
 
     public void afterInsert(List<Contact> newList){
         updateContactCount(newList, new Map<Id, Contact>());
+        
     }
 
 
     public void afterDelete(List<Contact> oldList){
-        updateContactCount(oldList, new Map<Id, Contact>());
+        updateContactCount(oldList, new Map<Id, Contact>());        
     }
 
-    public void afterUpdate(List<Contact> newList, Map<Id, Contact> oldMap ){
-        updateOldNewValues(newList, oldMap);
+    public void afterUpdate(List<Contact> newList, Map<Id,Contact> oldConList){
+        //updateOldNewValues(newList, oldMap);
+         publishEvent(newList,oldConList);
+    }
+
+
+    public static void publishEvent(List<Contact> con,Map<Id,Contact> conMap){
+        List<ContactEvent__e> conEvents = new List<ContactEvent__e>();
+        for(Contact cons : con){
+            if(cons.Status__c <> conMap.get(cons.Id).Status__c){
+                ContactEvent__e  conEve = new ContactEvent__e(Status__c = cons.Status__c,ConId__c =cons.Id);
+                conEvents.add(conEve);
+                System.debug('eventss--->'+conEve);
+            }            
+        }
+         List<Database.SaveResult> srList = EventBus.publish(conEvents);
+          for(Database.SaveResult sr : srList) {
+            if (sr.isSuccess()) {
+                // Operation was successful, so get the ID of the record that was processed
+                System.debug('Successfully Published : ' + sr.getId());
+            }
+            else {
+                // Operation failed, so get all errors                
+                for(Database.Error err : sr.getErrors()) {
+                    System.debug('The following error has occurred.');                    
+                    System.debug(err.getStatusCode() + ': ' + err.getMessage());
+                    //System.debug('Account fields that affected this error: ' + err.getFields());
+                }
+            }
+        }   
     }
 
     public static void updateContactCount(List<Contact> conList , Map<Id, Contact> oldMap){

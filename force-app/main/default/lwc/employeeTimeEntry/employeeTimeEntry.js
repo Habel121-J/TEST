@@ -60,8 +60,7 @@ export default class EmployeeTimeEntry extends LightningElement {
         this.tableColumns.forEach(ele => {
             if (ele.label !== 'Delete' && ele.label !== 'Project' && ele.label !== 'Task' && ele.label !== '')
                 this.tableInput.push({ type: 'number', label: ele.label, isEdit: false });
-        });
-        
+        });        
         const currentDate = new Date();
         const currentDay = currentDate.getDay();
         var difference = (currentDay + 6) % 7;

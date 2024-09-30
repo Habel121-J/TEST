@@ -1,9 +1,6 @@
 trigger ContactTrigger on Contact (after insert,after delete, before insert, before update,after update) {
 
     ContactTriggerHandler handler = new ContactTriggerHandler();
-    
-     
-
 
     if(trigger.isBefore){
         if(trigger.isInsert  && CheckRecursion.isRunOnce){
@@ -19,6 +16,7 @@ trigger ContactTrigger on Contact (after insert,after delete, before insert, bef
             handler.afterInsert(Trigger.new);
         }
         else if(Trigger.isUpdate){
+            System.debug('inside---update');
             handler.afterUpdate(Trigger.new, Trigger.oldMap);
         }
         else if(Trigger.isDelete){

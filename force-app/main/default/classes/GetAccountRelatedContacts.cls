@@ -1,7 +1,7 @@
 public  class  GetAccountRelatedContacts {
     
     @AuraEnabled(cacheable=true)
-    public static List<SObject>  getAccCons(List<String> fields, String objName, String recordId){
+    public static List<SObject> getAccCons(List<String> fields, String objName, String recordId){
         
         return getRecords(fields, objName, recordId);
     }
@@ -93,7 +93,6 @@ public  class  GetAccountRelatedContacts {
         return Database.query(query);
     }
 
-
     public class ColumnWrapper{
 
     @AuraEnabled
@@ -106,6 +105,4 @@ public  class  GetAccountRelatedContacts {
     public String fieldname;
 
     }
-
-
 }

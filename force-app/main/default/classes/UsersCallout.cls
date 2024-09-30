@@ -2,8 +2,6 @@ public  class UsersCallout {
     
     @AuraEnabled
     public static String getUserData(Integer one ,Integer two){
-
-
         System.debug('one---'+two);
         Http http = new Http();
         HttpRequest request = new HttpRequest();

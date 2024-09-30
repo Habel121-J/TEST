@@ -61,8 +61,7 @@ export default class customMetadataEditor extends LightningElement {
                     if(!columnsToHide.includes(field.fieldName.toLowerCase())){ 
                         console.log('FIELD> ', JSON.stringify(field));
                         cols.push(
-                            {
-                                label : field.label, 
+                            {                                label : field.label, 
                                 fieldName : field.fieldName, 
                                 type : field.type !== 'REFERENCE' ? field.type.toLowerCase() : '', 
                                 editable : (field.label !== 'Label' && field.type !== 'REFERENCE')  ? true : false, 
@@ -74,6 +73,7 @@ export default class customMetadataEditor extends LightningElement {
                         colsForNew.push(
                             {
                                 label : field.label,
+                                 fieldName : field.fieldName, 
                                 type : field.type === 'BOOLEAN' ? 'checkbox' : field.type === 'REFERENCE' ? 'search' : field.type.toLowerCase(),
                                 required : field.label === 'Label' ? true : field.type !== 'BOOLEAN' ? field.isRequired : false
                             }

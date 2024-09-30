@@ -1,0 +1,12 @@
+<template>
+    <lightning-card title="GRID ACCOUNT TABLE">        
+        <div class="slds-p-around_medium">
+            <lightning-tree-grid
+                hide-checkbox-column
+                columns={gridColumns}
+                data={gridData}
+                key-field="Name"
+            ></lightning-tree-grid>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,13 @@
+<template>
+    <lightning-card title="Conditional rendering ParentChild">
+        <lightning-combobox
+        name="Code"
+        label="Code"
+        placeholder="Choose Code"
+        onchange={handleChange}
+        value={childData}
+        options={statusOptions}>
+    </lightning-combobox>
+    <c-child-component message-from-parent={childData}></c-child-component>
+</lightning-card>
+</template>

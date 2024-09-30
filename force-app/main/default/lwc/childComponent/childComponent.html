@@ -1,0 +1,14 @@
+<template>    
+    <lightning-card>
+        <template lwc:if={Alpha}>
+            <lightning-input title="Name">  </lightning-input>
+        </template>
+        <template lwc:if={Beta}>
+            <lightning-input title="Phone"> </lightning-input>
+        </template>
+        <template lwc:if={Bravo}>
+            <lightning-input title="Email">  </lightning-input>
+        </template>
+        <!-- <p>{messageFromParent}</p> -->
+    </lightning-card>
+</template>

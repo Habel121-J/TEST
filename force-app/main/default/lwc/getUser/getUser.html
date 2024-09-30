@@ -2,7 +2,7 @@
     <lightning-card title="User Data" icon-name="action:user">
         <lightning-button variant="brand" label="Get User Info" title="Primary action" onclick={handleClick} class="slds-p-around_xx-small"></lightning-button>
 
-        <table if:true={loadTable} class='slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds' role="grid">
+        <table if:true={loadTable}  class='slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds' role="grid">
             <thead>
                 <th class="" scope="col">
                     <div class="slds-truncate" title="First Name">First Name</div>
@@ -28,11 +28,8 @@
                     </tr>
                     
                 </template> 
-            </tbody>
-       
-        </table>
-        
-        
+            </tbody>       
+        </table>        
         <button if:true={showButtons} title= "Next" disabled={disableNext} class="slds-button slds-button_brand" onclick={hanldeNext}>Next</button>
         <button if:true={showButtons}  title= "Previous" disabled={disablePrevious} class="slds-button slds-button_brand" onclick={hanldePrevious}>Previous</button>
         
