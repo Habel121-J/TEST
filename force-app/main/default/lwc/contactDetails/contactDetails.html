@@ -1,0 +1,114 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-card title='ContactList'>
+        <table class='slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds' role="grid">
+            <thead>
+               <template for:each={dynamicCols} for:item="tabHeader">
+                    <th class="" scope="col" key={tabHeader.fieldName}>
+                        <div class="slds-truncate" title={tabHeader.label}>{tabHeader.label}</div>
+                    </th>
+                </template>               
+            </thead>
+            <tbody> 
+                <template for:each={TableData} for:item="con">
+                    <tr key={con.Id}>  
+                        <template for:each={con.values} for:item="value" for:index="index">
+                            <td key={value}>
+                               {value}
+                            </td>
+                        </template>
+                      
+                        <td><lightning-button-icon data-id={con.Id} alternative-text="" icon-name="action:remove"
+                            variant="destructive" title="unassign contact" name="unassign" onclick={handleUnassign}>
+                        </lightning-button-icon>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+        <div class="slds-p-around_xx-medium" style="margin-top: 5%">
+            <lightning-button-icon alternative-text="Manage Contacts" onclick={handleOpenModal} icon-name="utility:add">
+            </lightning-button-icon>
+        </div>
+        
+        <!-- Modal POP UP -->
+        <template if:true={openModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleCloseModal}>
+                        <span class="slds-assistive-text">Cancel and close</span>
+                    </button>
+                    <div class="slds-modal__header">
+                        <h6 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Create or Add Contacts</h6>
+                    </div>
+                    <div class="slds-modal__content slds-tabs_default" style="min-height: 50%; max-height:75%; height:50%" id="modal-content-id-1">
+                        <lightning-tabset>
+                            <lightning-tab label="Create New" onactive={handleFocus}>
+                                <div class="slds-grid slds-wrap">
+                                    <template for:each={dynamicInputs} for:item="inputs">
+                                    <div class="slds-col slds-p-around_xx-small slds-size_1-of-2" key={inputs.fieldName}>
+                                        <lightning-input class="validate newInputs" data-name={inputs.fieldName} label={inputs.label} type={inputs.type} onchange={handleChange}></lightning-input>
+                                    </div>
+                                </template>
+                                </div>
+                            </lightning-tab>
+                                <lightning-tab label="Add Existing" onactive={handleFocus}>
+                                    <lightning-input class=" searchInput slds-p-around_xx-small slds-align_absolute-center " 
+                                                                    data-id = "clear"
+                                                                    style="width:403px"
+                                                                    onchange={searchKeyword} 
+                                                                    label="Search Contacts"
+                                                                    type="search"
+                                                                    onblur={handleSearchBlur}
+                                                                    onclick={handleTabChange}> 
+                                    </lightning-input>
+                                    <div if:true={isSearch} class="slds-align_absolute-center slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open" >    
+                                        <div class="slds-dropdown slds-dropdown_large" style="margin-top: -4px" onblur={handleBlur}>
+                                            <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                                                <template for:each={searchResults} for:item="data">
+                                                    <div key={data.Id}>
+                                                        <li class="slds-dropdown__item" role="presentation" tabindex="0" data-id={data.Id} onclick={handleSelectedItem}>
+                                                            <span class="slds-lookup__item-action slds-lookup__item-action--label" role="option">
+                                                                <lightning-icon class="slds-icon slds-icon--small slds-icon-text-default" icon-name="standard:contact" alternative-text="Contact" size="small"></lightning-icon>
+                                                                <span class="slds-truncate" tabindex="0">{data.Name}</span>
+                                                            </span>
+                                                        </li>
+                                                    </div>                                                
+                                                </template>
+                                                <template if:true={noData}>
+                                                    <div>
+                                                        <li class="slds-dropdown__item" role="presentation" tabindex="0">
+                                                            <span class="slds-lookup__item-action slds-lookup__item-action--label" role="option">
+                                                                <span class="slds-truncate" tabindex="0">No Records Found</span>
+                                                            </span>
+                                                        </li>
+                                                    </div>                                                
+                                                </template>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                <template if:true={ShowTable}>
+                                    <div style="height: 300px;">
+                                        <lightning-datatable key-field="Id"
+                                                            columns={columns}
+                                                            data={dataTable} 
+                                                            selected-rows={checkRows} 
+                                                            show-checkbox-column>
+                                        </lightning-datatable>
+                                    </div>
+                                </template>
+                            </lightning-tab>
+                        </lightning-tabset>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={handleCloseModal}>Cancel</button>
+                        <button if:true={isCreate} title= "Add" class="slds-button slds-button_brand" onclick={hanldeAddOrCreate}>Add</button>
+                        <button if:false={isCreate} title ="Create" class="slds-button slds-button_brand" onclick={hanldeAddOrCreate}>Create</button>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </lightning-card>
+</template>

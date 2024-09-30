@@ -1,0 +1,68 @@
+<template>
+    <lightning-card title="Employee TimeSheet Entry">       
+            <lightning-spinner if:true={showSpinner} variant="brand" alternative-text="Loading" size="large"></lightning-spinner>       
+        <lightning-layout>
+            <lightning-layout-item padding="around-small">
+                <label>Employee</label>
+                <div class="slds-box slds-box_x-small" style="margin-top: 3px">
+                    <lightning-icon size="small" icon-name="standard:avatar">' '</lightning-icon>
+                    <span> {currentUserName}</span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <lightning-input class="calendar" label='Week Beginning From' type="date" value={selectedWeek} onchange={handleDateChange}></lightning-input>
+            </lightning-layout-item>           
+        </lightning-layout>
+                                                            <!--TABLE  -->
+        <table class='slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered' role="grid">            
+            <template iterator:it={iterateRows}>                            
+                <thead key={it.value.count}>           
+                    <template for:each={it.value.columns} for:item="cols">      
+                        <th key={cols.date} class="" scope="col">
+                            <div class="slds-truncate" title={title}>{cols.label} {cols.date}</div>                        
+                        </th>                
+                    </template>
+                </thead>    
+                <tbody key={it.value.count}>                 
+                        <tr>
+                            <td><lightning-button-icon style="margin-top: 17px;" data-id={it.value.count}
+                                    icon-name="utility:delete" variant="destructive" name="unassign"
+                                    onclick={handleRowDelete}>
+                                </lightning-button-icon>
+                            </td>
+                            <td>
+                                <lightning-combobox required="true" data-id={it.value.count} options={projectValues}
+                                    placeholder='Select Project' disabled={comboDisable} variant="label-hidden" label="Projectvalues"
+                                   ></lightning-combobox>
+                            </td>
+                            <td>
+                                <lightning-combobox data-id={it.value.count} variant="label-hidden" label="taskValues"
+                                    options={taskValues} required="true" placeholder='Select Task'></lightning-combobox>
+                            </td>                                                      
+                                <template for:each={it.value.tableInput} for:item="tableData">
+                                    <td key={tableData}>
+                                        <lightning-input class="input" maxlength="1" pattern="[0-8]" data-label={tableData.label} onchange={handleChange}
+                                            data-date={tableData.dates} label={tableData.label} disabled={tableData.isEdit} title={tableData.title} variant="label-hidden" type={tableData.type}></lightning-input>
+                                       
+                                    </td>
+                                </template>                            
+                        </tr>                    
+                </tbody>
+            </template>        
+        </table>
+        <lightning-layout style="margin-top: 30px;">
+            <lightning-layout-item padding="around-small" size="5">
+                <lightning-button-icon icon-name="utility:add" onclick={handleAddRow}></lightning-button-icon>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" >
+                <lightning-button label="Cancel" variant="brand" onclick={handleCancel}></lightning-button>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <lightning-button label="Save"  onclick={handleSave} variant="brand"></lightning-button>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <lightning-button label="Submit" variant="neutral" onclick={handleSubmit}></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

@@ -1,0 +1,91 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div class="c-container">
+        <lightning-card title="Custom Metadata Editor" icon-name="standard:budget_allocation">
+            <lightning-layout size="12">
+                <lightning-layout-item size="03" padding="around-small" class="slds-p-right_none">
+                    <!-- <div class="slds-var-m-around_medium"> -->
+                        <lightning-combobox
+                            class="mdtDropdown"
+                            name="metadataRec"
+                            label="Metadata Type"
+                            value=""
+                            placeholder="Select Metadata Record"
+                            options={metadataTypes}
+                            onchange={handleMetaRecordChange}
+                            disabled
+                            required>
+                        </lightning-combobox>
+                    <!-- </div> -->
+                </lightning-layout-item>  
+                <lightning-layout-item size="02" style="padding-top: 36px;" padding="around-small" class="slds-p-left_none">
+                    <lightning-button-icon if:true={metadataApiName} icon-name="action:refresh" data-name={metadataApiName} onclick={handleGridRefresh} variant="brand" alternative-text="Refresh Grid" class="slds-m-left_xx-small" title="Refresh Grid"></lightning-button-icon>  
+                </lightning-layout-item>
+                <lightning-layout-item size="05"></lightning-layout-item>
+                <lightning-layout-item size="02" padding="around-small" style="padding-top: 23px; text-align:center;">
+                    <div if:true={metadataApiName} class="slds-p-around_x-small">
+                        <button class="slds-button slds-button_outline-brand newBtn" title="Create New" aria-disabled="false" aria-label="create new" onclick={handleNew}>Create New</button>
+                    </div>
+                </lightning-layout-item> 
+            </lightning-layout>
+            <lightning-layout>
+                <lightning-layout-item size="12" flexibility="auto">
+                    <template if:true={data}>   <!-- table -->
+                        <!-- <c-custom-datatable-comp key-field="Id" data={data} columns={columns}></c-custom-datatable-comp> -->
+                        <lightning-datatable
+                                key-field="Id"
+                                data={data}
+                                columns={columns}
+                                show-row-number-column="false"
+                                hide-checkbox-column="true"
+                                onsave={handleUpdate}
+                                draft-values={draftValues}
+                                sorted-by={sortBy}
+                                sorted-direction={sortDirection}
+                                onsort={handleSort}>
+                        </lightning-datatable>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+            <!-- <div if:true={metadataApiName} class="slds-p-around_x-small">
+                <button class="slds-button slds-button_outline-brand newBtn" title="Create New" aria-disabled="false" aria-label="create new" onclick={handleNew}>Create New</button>
+            </div> -->
+
+            <lightning-layout size="12">
+                <template lwc:if={openModal}>
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container newContainer">
+                           <header class="slds-modal__header">
+                              <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                                 <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small" ></lightning-icon>
+                                 <span class="slds-assistive-text">Close</span>
+                              </button>
+                              <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create New Custom Metadata</h2>
+                           </header>
+                           <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <div class="slds-grid slds-wrap">
+                                    <template for:each={columnsForNew} for:item="column">
+                                        <div key={column.label} class="slds-col slds-size_6-of-12 slds-p-around_xx-small">
+                                            <label for="input" style="float:top">{column.label}</label> 
+                                            <abbr if:true={column.required} title="required" class="slds-required">*</abbr>
+                                            <lightning-input id={column.label} label={column.label} class="input" variant="label-hidden" type={column.type} required={column.required}></lightning-input>
+                                        </div>
+                                    </template>
+                                </div>                                
+                           </div>
+                           <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_text-destructive" onclick={closeModal}>Cancel</button>
+                                <button class="slds-button slds-button_brand" onclick={handleCreate}>Save</button>
+                           </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+            </lightning-layout>
+            
+            <div class="slds-grid_align-center spinner" if:true={isSpinner}>
+                <lightning-spinner alternative-text="Loading..." variant="brand"></lightning-spinner>
+            </div>
+        </lightning-card>
+    </div>
+</template>

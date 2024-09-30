@@ -1,0 +1,13 @@
+<template>
+    <lightning-card>
+        <lightning-input class="City" type="text" label="Enter City" ></lightning-input> 
+        <button class="slds-button" onclick={handleClick}>Get Weather Info</button>
+        <template lwc:if={loadWeather}>
+            <!-- <template for:each={weatherdata.main} for:item="wInfo"> -->
+                <!-- <p key={wInfo.id}>wInfo.description</p> -->
+            {weatherdata.main.temp}
+
+            <!-- </template> -->
+        </template>
+    </lightning-card>
+</template>

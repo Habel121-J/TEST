@@ -1,0 +1,23 @@
+.newContainer {
+    width: 85%;
+    max-width: 60rem;
+    min-width: 20rem;
+}
+
+.text-button > button {
+    border: none;
+    height: 1px;
+    /* padding: 4px 10px;
+    cursor: default;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #080707; */
+}
+
+.text-button > button:hover {
+    border: none;
+    color: #080707;
+}

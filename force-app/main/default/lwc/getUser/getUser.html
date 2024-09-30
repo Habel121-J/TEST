@@ -1,0 +1,41 @@
+<template>
+    <lightning-card title="User Data" icon-name="action:user">
+        <lightning-button variant="brand" label="Get User Info" title="Primary action" onclick={handleClick} class="slds-p-around_xx-small"></lightning-button>
+
+        <table if:true={loadTable} class='slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds' role="grid">
+            <thead>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="First Name">First Name</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Last Name">Last Name</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Email">Email</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Image">User Image</div>
+                </th>
+            </thead>
+            <tbody>
+                <template for:each={userData} for:item="user">
+                    <tr key={user.id}>
+                        <td>{user.first_name} </td>
+                        <td>{user.last_name}</td>
+                        <td>{user.email}</td>
+                        <td><img src={user.avatar} alt={altText} class="image"/></td>
+
+                    </tr>
+                    
+                </template> 
+            </tbody>
+       
+        </table>
+        
+        
+        <button if:true={showButtons} title= "Next" disabled={disableNext} class="slds-button slds-button_brand" onclick={hanldeNext}>Next</button>
+        <button if:true={showButtons}  title= "Previous" disabled={disablePrevious} class="slds-button slds-button_brand" onclick={hanldePrevious}>Previous</button>
+        
+
+    </lightning-card>
+</template>

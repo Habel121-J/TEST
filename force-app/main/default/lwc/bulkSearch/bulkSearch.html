@@ -1,0 +1,35 @@
+<template>
+    <lightning-card >
+        <lightning-textarea style="width : 445px;" onchange={handleChange}  required placeholder="Enter SearchTerm Per Line" label="Enter a search Value per line" class="slds-p-right_medium textArea"></lightning-textarea>
+        <!-- <lightning-button variant="brand" label="Search" title="Search " onclick={handleSearch} class="slds-m-left_x-small"></lightning-button>
+        <lightning-button label="Search and Open" onclick={handleSearch} class="slds-m-left_x-small"></lightning-button>
+        <h6> <br> Enter No of Tabs to Open : <input  style="width: 3%;"  class="input "  type="number" onchange={handleTabs} value=2></input></h6> -->
+        <lightning-layout>
+            <lightning-layout-item padding="around-small">
+               <lightning-button variant="brand" label="Search" title="Search " onclick={handleSearch} class="slds-m-left_x-small"></lightning-button>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+               <lightning-button label="Search and Open" onclick={handleSearch} class="slds-m-left_x-small"></lightning-button>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" style="margin-top: -13px;">
+               <h6> <br> Enter No of Tabs to Open : <input  style="width: 20%;"  class="input "  type="number" onchange={handleTabs} value=2></input></h6>
+
+            </lightning-layout-item>
+            
+        </lightning-layout>   
+        <template if:true={showTable}>
+            <lightning-datatable 
+                key-field="Id"
+                data={data} 
+                hide-checkbox-column="true"
+               columns={columns}> 
+            </lightning-datatable>
+        </template>
+        <template if:true={showSpinner}>
+            <lightning-spinner variant="brand" alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+        <template if:true={NoRecords}>
+            <h6> <b>No Records Found</b></h6>
+        </template>
+    </lightning-card>
+</template>
